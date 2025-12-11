@@ -45,12 +45,14 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 app.permanent_session_lifetime = timedelta(minutes=5) 
  
 # Conexión a la Base de Datos 
-db = mysql.connector.connect( 
-    host="Localhost", 
-    user="root", 
-    password="", 
-    database="proyecto" 
-) 
+def get_db_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="materias_db"
+    )
+db = get_db_connection()
  
 # ----------------------------------------------------- 
 # --- DECORADORES SIMPLIFICADOS ----------------------- 
