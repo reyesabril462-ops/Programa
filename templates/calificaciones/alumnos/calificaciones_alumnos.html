@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calificaciones de alumnos</title>
+        <link rel="stylesheet" href="/static/actividades/calficaciones_alumnos.css">
+    </head>
+<body>
+    {% extends "base.html" %}
+
+        {% block title %}Calificaciones de alumnos{% endblock %}
+
+        {% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+        <form method="POST">
+            {% if calificaciones %}
+            <h2>calificaciones</h2>
+            <table border="1" class="tabla_calificaciones">
+                <tr>
+                    <th>Materia</th>
+                    <th>P1</th>
+                    <th>P2</th>
+                    <th>P3</th>
+                    <th>%A</th>
+                    <th>Final</th>
+                    <th>R1</th>
+                    <th>R2</th>
+                    <th>R3</th>
+                    <th>ORD</th>
+                    <th>E1</th>
+                    <th>E2</th>
+                    <th>T</th>
+                </tr>
+                {% for fila in calificaciones %}
+                <tr>
+                    <td> {{ fila.materia }} </td>
+                    <td> {{ fila.p1 }} </td>
+                    <td> {{ fila.p2 }} </td>
+                    <td> {{ fila.p3 }} </td>
+                    <td> {{ fila.asistencia }} </td>
+                    <td> {{ fila.fin }} </td>
+                    <td> {{ fila.r1 }} </td>
+                    <td> {{ fila.r2 }} </td>
+                    <td> {{ fila.r3 }} </td>
+                    <td> {{ fila.ord }} </td>
+                    <td> {{ fila.e1 }} </td>
+                    <td> {{ fila.e2 }} </td>
+                    <td> {{ fila.t }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+            <button type="button" onclick="window.location.href='/menu/alumnos'" class="boton-volver"><---Volver</button>
+        </form>
+        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
+    </div>
+    {% endblock %}
+</body>
+</html>

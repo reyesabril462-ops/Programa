@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro</title>
+        <link rel="stylesheet" href="/static/login/login_alumnos.css">
+        <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
+    </head>
+    <body>
+    <form method="POST" action="{{ url_for('login_alumnos') }}">
+            <div class="container">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                <h1 class="login-texto">Login de Alumnos</h1>
+                
+                <label for="nocontrol">Número de Control:</label>
+                <input type="text" id="nocontrol" name="NumeroControl" placeholder="Número de control/Control Number" required><br>
+                
+                <label for="curp">CURP:</label>
+                <input type="text" id="curp" name="Curp" placeholder="CURP" required><br>
+                
+                <button type="submit" class="boton-loguear">Iniciar sesión</button>
+                <button type="button" onclick="window.location.href='/login/docentes'" class="boton-loguear">Iniciar sesión como Docente</button>
+                <button type="button" onclick="window.location.href='/registro/alumnos'" class="boton-registrar">¿No tienes cuenta? Regístrate</button>
+                <button type="button" onclick="window.location.href='{{ url_for('ayuda', from='login_alumnos') }}'" class="ayuda-login">¿Necesitas ayuda?</button>
+            </div>
+        </form>
+
+        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-login">
+    </body>
+</html>

@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de alumnos</title>
+    <link rel="stylesheet" href="/static/lista/lista_de_alumnos.css">
+</head>
+<body>
+{% extends "base.html" %}
+{% block title %}Listado y Registro de Alumnos{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+    <button type="button" onclick="window.location.href='/menu/docentes'" class="boton-logout">Volver</button>
+    <h1>Listado y registro de alumnos</h1><br>
+
+    <h3>Registrar Nuevo Alumno</h3>
+    <form method="POST" action="{{ url_for('gestionar_alumnos') }}">
+        <label for="nocontrol">N.C</label><br>
+        <input type="text" id="nocontrol" name="NumeroControl" required><br>
+
+        <label for="curp">CURP</label><br>
+        <input type="text" id="curp" name="Curp" required><br>
+
+        <label for="nombre">Nombre</label><br>
+        <input type="text" id="nombre" name="Nombre" required><br>
+
+        <label for="paterno">A.P</label><br>
+        <input type="text" id="paterno" name="Paterno" required><br>
+
+        <label for="materno">A.M</label><br>
+        <input type="text" id="materno" name="Materno" required><br>
+
+        <label for="turno">Turno</label><br>
+        <div class="radio-group">
+            <input type="radio" id="turno_vespertino" name="Turno" value="Vespertino" required>
+            <label for="turno_vespertino">Vespertino</label><br>
+            <input type="radio" id="turno_matutino" name="Turno" value="Matutino" required>
+            <label for="turno_matutino">Matutino</label>
+        </div><br>
+
+        <label for="grupo">Grupo</label><br>
+        <select id="grupo" name="Grupo" required>
+            <option value="" disabled selected>Escoge el grupo</option>
+            {% for g in [101,102,103,104,201,202,203,204,301,302,303,304,401,402,403,404,501,502,503,504] %}
+                <option value="{{ g }}">{{ g }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="semestre">Semestre</label><br>
+        <select id="semestre" name="Semestre" required>
+            <option value="" disabled selected>Elige un semestre</option>
+            {% for s in range(1,6) %}
+                <option value="{{ s }}">{{ s }} semestre</option>
+            {% endfor %}
+        </select><br>
+        
+
+        <button type="submit" class="boton-zona">Registrar Alumno</button>
+    </form>
+</div>
+
+<br><br><br>
+
+<div class="container-alumnos">
+    <h2>Alumnos Registrados</h2>
+
+    <div class="buscador-container">
+        <input type="text" id="buscador" placeholder="Buscar por nombre, grupo o número de control...">
+        <button id="btn-buscar" class="boton-zona">Buscar</button>
+        <button id="btn-voz" class="boton-zona">🎤 Voz</button>
+        <p id="resultado-voz"></p>
+    </div>
+
+    <table border="1" class="tabla-alumnos">
+        <thead>
+            <tr>
+                <th>Num. Control</th>
+                <th>Curp</th>
+                <th>Nombre</th>
+                <th>Paterno</th>
+                <th>Materno</th>
+                <th>Turno</th>
+                <th>Grupo</th>
+                <th>Semestre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tbody-alumnos">
+            {% for alumno in alumnos %}
+            <tr>
+                <td>{{ alumno.NumeroControl }}</td>
+                <td>{{ alumno.Curp }}</td>
+                <td>{{ alumno.Nombre }}</td>
+                <td>{{ alumno.Paterno }}</td>
+                <td>{{ alumno.Materno }}</td>
+                <td>{{ alumno.Turno }}</td>
+                <td>{{ alumno.Grupo }}</td>
+                <td>{{ alumno.Semestre }}</td>
+                <td>
+                    <button type="button" onclick="window.location.href='{{ url_for('editar_alumno', numerocontrol=alumno.NumeroControl) }}'" class="boton-zona">Editar</button>
+                    <form action="{{ url_for('eliminar_alumno', numerocontrol=alumno.NumeroControl) }}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('¿Eliminar a {{ alumno.Nombre }} {{ alumno.Paterno }}?');" class="boton-logout">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
+
+
+<script src="{{ url_for('static', filename='js/buscadores.js')}}"></script>
+{% endblock %}
+</body>
+</html>

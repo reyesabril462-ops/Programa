@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard Docentes — Entregas y Chat</title>
+  <style>
+    :root{--bg:#f4f6f9;--card:#fff;--muted:#6b7280;--accent:#2563eb}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial}
+    body{margin:0;background:var(--bg);color:#0f172a}
+    header{background:linear-gradient(90deg,#0ea5e9,#7c3aed);color:white;padding:16px 24px;display:flex;align-items:center;gap:12px}
+    header h1{font-size:18px;margin:0}
+    .app{display:grid;grid-template-columns:300px 1fr;gap:20px;padding:20px}
+    .panel{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+    .students-list{max-height:70vh;overflow:auto}
+    .student{display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;cursor:pointer}
+    .student:hover{background:#f3f4f6}
+    .status{font-size:12px;padding:6px 8px;border-radius:999px}
+    .delivered{background:#dcfce7;color:#166534}
+    .missing{background:#fee2e2;color:#991b1b}
+    .main-grid{display:grid;grid-template-columns:1fr 420px;gap:16px}
+    .submission{padding:12px;border-radius:10px;border:1px dashed #e6eefc;background:linear-gradient(180deg,rgba(255,255,255,0.6),transparent)}
+    .submission h3{margin:0 0 8px 0}
+    .assignment{display:flex;gap:10px;align-items:center}
+    .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(37,99,235,0.12)}
+    .chat{display:flex;flex-direction:column;height:70vh}
+    .messages{flex:1;overflow:auto;padding:12px;border-radius:8px;background:#fbfdff;border:1px solid #e6eefc}
+    .msg{margin-bottom:8px;max-width:80%}
+    .msg.me{text-align:right;margin-left:auto}
+    .msg p{margin:0;padding:8px 10px;border-radius:8px;display:inline-block}
+    .msg.me p{background:#dbeafe}
+    .msg.they p{background:#f1f5f9}
+    .composer{display:flex;gap:8px;margin-top:8px}
+    input[type=text],textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #e6eefc}
+    .meta{color:var(--muted);font-size:13px}
+    .controls{display:flex;gap:8px;margin-top:10px}
+    .small{font-size:12px;padding:6px 8px}
+    footer{padding:12px;text-align:center;color:var(--muted);font-size:13px}
+    @media(max-width:900px){.app{grid-template-columns:1fr}.main-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L15 8H9L12 2Z" fill="white" opacity="0.15"/><path d="M12 22L9 16H15L12 22Z" fill="white" opacity="0.12"/><path d="M4 11L2 14H6L4 11Z" fill="white" opacity="0.08"/></svg>
+    <div>
+      <h1>Dashboard Docentes — Entregas y Chat</h1>
+      <div class="meta">Verifica entregas de actividades y comunícate con tus alumnos</div>
+    </div>
+  </header>
+
+  <div class="app">
+    <aside class="panel">
+      <h2 style="margin:0 0 10px 0">Alumnos</h2>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input id="search" type="text" placeholder="Buscar alumno..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6eefc" />
+        <button id="btn-refresh" class="btn small">Refrescar</button>
+      </div>
+      <div class="students-list" id="studentsList"></div>
+      <div style="margin-top:12px;display:flex;gap:6px;align-items:center">
+        <button id="addDummy" class="btn ghost small">Agregar alumno demo</button>
+        <button id="reset" class="small">Restablecer datos</button>
+      </div>
+    </aside>
+
+    <main class="panel">
+      <div class="main-grid">
+        <section>
+          <div id="noSelection" class="meta">Selecciona un alumno para ver entregas y chat</div>
+
+          <div id="studentArea" style="display:none">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <div>
+                <h2 id="studentName" style="margin:0"></h2>
+                <div id="studentEmail" class="meta"></div>
+              </div>
+              <div>
+                <span id="deliveryStatus" class="status"></span>
+              </div>
+            </div>
+
+            <div class="submission">
+              <h3>Entregas</h3>
+              <div id="submissionsList"></div>
+              <div class="controls">
+                <button id="markAllDelivered" class="btn small">Marcar todo entregado</button>
+                <button id="markAllMissing" class="btn ghost small">Marcar todo pendiente</button>
+              </div>
+            </div>
+
+            <div style="height:16px"></div>
+
+            <div class="submission">
+              <h3>Chat con el alumno</h3>
+              <div class="chat">
+                <div id="messages" class="messages"></div>
+                <div class="composer">
+                  <input id="messageInput" type="text" placeholder="Escribe un mensaje..." />
+                  <button id="sendMsg" class="btn">Enviar</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <aside>
+          <div class="panel" style="padding:12px">
+            <h3 style="margin-top:0">Información rápida</h3>
+            <div id="summary" class="meta">Cargando...</div>
+            <div style="height:10px"></div>
+            <h4 style="margin:6px 0">Filtros</h4>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="small" onclick="filterStudents('all')">Todos</button>
+              <button class="small" onclick="filterStudents('delivered')">Entregaron</button>
+              <button class="small" onclick="filterStudents('missing')">Faltan</button>
+            </div>
+            <div style="height:12px"></div>
+            <h4 style="margin:6px 0">Sugerencias</h4>
+            <ul class="meta">
+              <li>Usa el buscador para localizar alumnos por nombre o email.</li>
+              <li>El chat se guarda en el navegador (localStorage) para esta máquina.</li>
+              <li>Puedes adaptar el código para conectar con tu servidor / API.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <footer>Versión demo — copia este archivo y adáptalo a tu backend si quieres persistencia global.</footer>
+
+  <script>
+    // ---------- Datos de ejemplo (se almacenan en localStorage para persistencia local) ----------
+    const SAMPLE_KEY = 'docentes_demo_data_v1';
+
+    const sample = {
+      students: [
+        {id: 'a1', name: 'María López', email: 'maria.lopez@escuela.edu', submissions:[{id:'t1', title:'Tarea 1', delivered:true, file:'https://example.com/t1.pdf'}]},
+        {id: 'a2', name: 'Juan Pérez', email: 'juan.perez@escuela.edu', submissions:[{id:'t1', title:'Tarea 1', delivered:false, file:null}]},
+        {id: 'a3', name: 'Luisa Martínez', email: 'luisa.m@escuela.edu', submissions:[{id:'t1', title:'Tarea 1', delivered:true, file:'https://example.com/luisa_t1.pdf'},{id:'t2', title:'Tarea 2', delivered:false, file:null}]}
+      ]
+    };
+
+    function getData(){
+      const raw = localStorage.getItem(SAMPLE_KEY);
+      if(!raw){ localStorage.setItem(SAMPLE_KEY, JSON.stringify(sample)); return JSON.parse(JSON.stringify(sample)); }
+      return JSON.parse(raw);
+    }
+    function saveData(data){ localStorage.setItem(SAMPLE_KEY, JSON.stringify(data)); }
+
+    // ---------- Renderizado de lista de alumnos ----------
+    let data = getData();
+    let selectedStudentId = null;
+    const studentsListEl = document.getElementById('studentsList');
+    const searchEl = document.getElementById('search');
+
+    function hasAnyDelivered(student){ return student.submissions.some(s=>s.delivered); }
+    function hasAllDelivered(student){ return student.submissions.length>0 && student.submissions.every(s=>s.delivered); }
+
+    function renderStudents(filter='all', q=''){
+      data = getData();
+      studentsListEl.innerHTML='';
+      const list = data.students.filter(s=>{
+        if(q){ const text = (s.name + ' ' + s.email).toLowerCase(); if(!text.includes(q.toLowerCase())) return false }
+        if(filter==='delivered') return hasAnyDelivered(s);
+        if(filter==='missing') return !hasAnyDelivered(s);
+        return true;
+      });
+
+      if(list.length===0){ studentsListEl.innerHTML='<div class="meta">No se encontraron alumnos</div>'; return }
+
+      list.forEach(s=>{
+        const el = document.createElement('div'); el.className='student'; el.dataset.id = s.id;
+        el.innerHTML = `<div>
+            <div style="font-weight:600">${s.name}</div>
+            <div class="meta">${s.email}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="meta small">${s.submissions.length} entregas</div>
+            <div class="status ${hasAnyDelivered(s)?'delivered':'missing'}">${hasAnyDelivered(s)?'Tiene entregas':'Sin entregas'}</div>
+          </div>`;
+        el.addEventListener('click',()=>selectStudent(s.id));
+        studentsListEl.appendChild(el);
+      });
+
+      updateSummary();
+    }
+
+    function selectStudent(id){
+      selectedStudentId = id;
+      document.getElementById('noSelection').style.display='none';
+      document.getElementById('studentArea').style.display='block';
+      const s = data.students.find(x=>x.id===id);
+      document.getElementById('studentName').textContent = s.name;
+      document.getElementById('studentEmail').textContent = s.email;
+      document.getElementById('deliveryStatus').className = 'status ' + (hasAnyDelivered(s)?'delivered':'missing');
+      document.getElementById('deliveryStatus').textContent = hasAnyDelivered(s)?'Ha entregado al menos una':'No ha entregado';
+      renderSubmissions(s);
+      renderMessages(s.id);
+    }
+
+    // ---------- Entregas ----------
+    function renderSubmissions(student){
+      const list = document.getElementById('submissionsList'); list.innerHTML='';
+      student.submissions.forEach(sub=>{
+        const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='8px 0';
+        const left = document.createElement('div'); left.innerHTML = `<div style="font-weight:600">${sub.title}</div><div class="meta">${sub.file?'<a href="'+sub.file+'" target="_blank">Ver archivo</a>':'Sin archivo'}</div>`;
+        const right = document.createElement('div');
+        const status = document.createElement('span'); status.className='status ' + (sub.delivered?'delivered':'missing'); status.textContent = sub.delivered?'Entregado':'Pendiente';
+        const toggle = document.createElement('button'); toggle.className='small'; toggle.style.marginLeft='8px'; toggle.textContent='Alternar';
+        toggle.addEventListener('click',()=>{
+          sub.delivered = !sub.delivered; saveData(data); renderStudents(searchEl.value? 'all' : 'all', searchEl.value); selectStudent(student.id);
+        });
+        right.appendChild(status); right.appendChild(toggle);
+        row.appendChild(left); row.appendChild(right);
+        list.appendChild(row);
+      });
+    }
+
+    document.getElementById('markAllDelivered').addEventListener('click',()=>{
+      if(!selectedStudentId) return alert('Selecciona un alumno');
+      const s = data.students.find(x=>x.id===selectedStudentId);
+      s.submissions.forEach(x=>x.delivered=true); saveData(data); selectStudent(s.id); renderStudents();
+    });
+    document.getElementById('markAllMissing').addEventListener('click',()=>{
+      if(!selectedStudentId) return alert('Selecciona un alumno');
+      const s = data.students.find(x=>x.id===selectedStudentId);
+      s.submissions.forEach(x=>x.delivered=false); saveData(data); selectStudent(s.id); renderStudents();
+    });
+
+    // ---------- Chat (persistido localmente por alumno) ----------
+    function chatKey(studentId){ return 'chat_student_' + studentId; }
+    function sendMessage(studentId, text, from='teacher'){
+      if(!text) return;
+      const key = chatKey(studentId);
+      const arr = JSON.parse(localStorage.getItem(key) || '[]');
+      arr.push({from, text, at:new Date().toISOString()});
+      localStorage.setItem(key, JSON.stringify(arr));
+      renderMessages(studentId);
+    }
+
+    function renderMessages(studentId){
+      const el = document.getElementById('messages'); el.innerHTML='';
+      if(!studentId) return;
+      const arr = JSON.parse(localStorage.getItem(chatKey(studentId)) || '[]');
+      arr.forEach(m=>{
+        const d = document.createElement('div'); d.className = 'msg ' + (m.from==='teacher'?'me':'they');
+        const p = document.createElement('p'); p.textContent = m.text;
+        const time = document.createElement('div'); time.className='meta'; time.style.fontSize='11px'; time.style.marginTop='6px'; time.textContent = new Date(m.at).toLocaleString();
+        d.appendChild(p); d.appendChild(time);
+        el.appendChild(d);
+      });
+      el.scrollTop = el.scrollHeight;
+    }
+
+    document.getElementById('sendMsg').addEventListener('click',()=>{
+      const input = document.getElementById('messageInput'); if(!selectedStudentId) return alert('Selecciona un alumno');
+      sendMessage(selectedStudentId, input.value, 'teacher'); input.value='';
+    });
+    document.getElementById('messageInput').addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('sendMsg').click(); } });
+
+    // ---------- Summary / filtros / acciones auxiliares ----------
+    function updateSummary(){
+      const summary = document.getElementById('summary');
+      const total = data.students.length;
+      const withAny = data.students.filter(s=>hasAnyDelivered(s)).length;
+      const withAll = data.students.filter(s=>hasAllDelivered(s)).length;
+      summary.textContent = `${total} alumnos — ${withAny} con al menos 1 entrega — ${withAll} con todas las entregas`; 
+    }
+
+    function filterStudents(mode){ renderStudents(mode, searchEl.value); }
+
+    document.getElementById('btn-refresh').addEventListener('click',()=>{ renderStudents('all', searchEl.value); });
+    searchEl.addEventListener('input',()=>{ renderStudents('all', searchEl.value); });
+
+    document.getElementById('addDummy').addEventListener('click',()=>{
+      const id = 'x' + Math.random().toString(36).slice(2,8);
+      data.students.push({id, name:'Alumno Demo '+id, email:id+'@escuela.edu', submissions:[{id:'t1',title:'Tarea 1',delivered:Math.random()>0.5,file:null}]}); saveData(data); renderStudents();
+    });
+
+    document.getElementById('reset').addEventListener('click',()=>{
+      if(!confirm('Restablecer datos de ejemplo?')) return; localStorage.removeItem(SAMPLE_KEY); localStorage.removeItem('chat_student_a1'); localStorage.removeItem('chat_student_a2'); localStorage.removeItem('chat_student_a3'); data = getData(); renderStudents(); document.getElementById('noSelection').style.display='block'; document.getElementById('studentArea').style.display='none';
+    });
+
+    // ---------- Inicio ----------
+    renderStudents();
+  </script>
+</body>
+</html>

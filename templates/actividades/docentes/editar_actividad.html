@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Editar Alumno{% endblock %}</title>
+    <link rel="stylesheet" href="/static/lista/lista_de_alumnos.css">
+</head>
+<body>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <h1>Editar la Actividad: {{ actividad.nombre }}</h1>    
+<form action="{{ url_for('editar_actividad', numero_actividad=actividad.numero_actividad) }}" method="post">
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" name="nombre" value="{{ actividad.nombre }}" required><br>
+
+    <label for="maestro">Maestro</label>
+    <input type="text" id="maestro" name="maestro" value="{{ actividad.maestro }}" required><br>
+
+    <label for="fecha_entrega">Fecha de entrega</label>
+    <input type="datetime-local" id="fecha_entrega" name="fecha_entrega" value="{{ actividad.fecha_entrega }}" required><br>
+
+    <label for="estado">Estado</label>
+    <select id="estado" name="estado" required">
+        {% for g in ["Entregado","No Entregado","Pendiente"] %}
+            <option value="{{ g }}" {% if actividad.estado|string == g|string %}selected{% endif %}>{{ g }}</option>
+        {% endfor %}
+    </select><br>
+
+    <button type="submit" class="boton-zona">Actualizar Actividad</button><br>
+    <button type="button" class="boton-zona" onclick="window.location.href='{{ url_for('actividades_docentes') }}'">Cancelar</button>
+</form>
+
+</div>
+<img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación de Identidad</title>
+    <link rel="stylesheet" href="/static/cambiar_contraseña/cambiar_contraseña.css">
+    <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
+  </head>
+<body>
+    <div class="container">
+      {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+        <h1>Verificación de Identidad</h1>
+        <form method="POST" action="{{ url_for('verificar_identidad') }}">
+            
+            <label for="nocontrol">Número de control</label>
+            <input type="text" id="nocontrol" name="nocontrol" required placeholder="Ingresa tu número de control"><br>
+            
+            <label for="curp">CURP:</label>
+            <input type="text" id="curp" name="curp" required placeholder="Ingresa tu CURP registrada"><br>
+            
+            <button type="submit" class="boton-zona" >Continuar</button>
+            <button type="button" onclick="window.location.href='/menu/principal'" class="boton-logout">Volver al menu</button>
+        </form>
+        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
+    </div>
+</body>
+</html>

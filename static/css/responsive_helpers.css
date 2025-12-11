@@ -1,0 +1,40 @@
+/* Responsive helpers: variables and utility rules */
+:root{
+    --bp-xs: 320px;
+    --bp-sm: 480px;
+    --bp-md: 768px;
+    --bp-lg: 992px;
+    --bp-xl: 1200px;
+}
+
+/* Box sizing helper */
+*,*::before,*::after{box-sizing:border-box}
+
+/* Make images and backgrounds scale */
+img, .fondo-menu{max-width:100%;height:auto;display:block}
+
+/* Container helper: fluid with sensible max-width */
+.responsive-container{width:100%;max-width:1100px;margin:0 auto;padding:0 1rem}
+
+/* Table responsiveness: keep table layout but allow wrapping and scrolling */
+.tabla-container{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.responsive-table{width:100%;border-collapse:collapse;table-layout:auto}
+.responsive-table th,.responsive-table td{padding:.6rem;text-align:left;word-break:break-word}
+
+/* On very small screens stack table rows as cards */
+@media (max-width: 600px){
+  .responsive-table thead{display:none}
+  .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td{display:block;width:100%}
+  .responsive-table tr{margin-bottom:1rem;border:1px solid #e8e8e8;padding:.5rem;border-radius:6px}
+  .responsive-table td{padding:.5rem 0}
+  .responsive-table td::before{content:attr(data-label);font-weight:600;display:block;margin-bottom:.25rem}
+}
+
+/* Utility: prevent overflow where unexpected */
+.overflow-hidden{overflow:hidden}
+
+/* Small typographic helpers */
+.lead{font-size:1.05rem}
+
+/* Make forms and buttons scale */
+input,select,textarea,button{font-size:1rem}

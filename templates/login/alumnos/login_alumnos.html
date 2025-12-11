@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/login/login_alumnos.css">
+    </head>
+    <body>
+    <form method="POST" action="{{ url_for('login_alumnos') }}">
+            <div class="container">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+                <button type="button" onclick="window.location.href='/menu/principal'" class="boton-registrar"><---Volver</button>
+                <h1 class="login-texto">Login de Alumnos</h1>
+                <label for="nocontrol">Numero de control:</label>
+                <input type="number" id="nocontrol" name="nocontrol" placeholder="Numero de control/Control Number" autocomplete="username" required><br>
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" name="contrasena" class="contrasena" placeholder="Contraseña/Password" autocomplete="current-password" required><br>
+                <button type="submit" class="boton-loguear">Iniciar sesión</button>
+                <button type="button" class="boton-loguear" onclick="window.location.href='/registro/alumnos'">Registrarse</button>
+                <button type="button" onclick="window.location.href='{{ url_for('ayuda', from_='login_alumnos') }}'" class="ayuda-login">¿Necesitas ayuda?</button>
+            </div>
+        </form>
+
+        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-login">
+    </body>
+</html>

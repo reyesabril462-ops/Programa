@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Menú</title>
+        <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/menu/menu.css">
+    </head>
+<body>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+        <h1>Bienvenido al Menú</h1>
+            <button type="submit" onclick="window.location.href='/login/alumnos'" class="boton-zona">📚Alumnos</button>
+            <button type="submit" onclick="window.location.href='/login/docentes'" class="boton-zona">👨‍🏫 Docentes</button>
+            <button type="submit" onclick="window.location.href='/menu/pagina/desarrollo'" class="boton-zona">👨‍💼 Directivos</button>
+            <button type="submit" onclick="window.location.href='/menu/pagina/desarrollo'" class="boton-zona">👥 Visitantes</button>
+            <button type="button" onclick="window.location.href='{{ url_for('ayuda', from_='menu') }}'" class="boton-zona">❓ Zona de ayuda</button>
+            <button type="submit" onclick="window.location.href='/cambiar/contraseña'" class="boton-zona">Cambiar contraseña (Alumnos)</button>
+
+        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
+    </div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entregas de Actividades</title>
+    <link rel="stylesheet" href="/static/actividades/ver_entregas.css">
+</head>
+
+<body>
+    {% extends "base.html" %}
+    {% block title %}Entregas de Actividades{% endblock %}
+
+    {% block content %}
+    <div class="container">
+
+        <h1>Entregas de Actividades por Alumno</h1>
+
+        <button type="button" onclick="window.location.href='/actividades/docentes'" class="boton-volver"><---
+                Volver</button>
+
+                <form method="GET" action="{{ url_for('ver_entregas_docente') }}" class="filtro-form">
+                    <label for="actividad_id">Seleccionar Actividad:</label>
+                    <select name="actividad_id" id="actividad_id" onchange="this.form.submit()">
+                        <option value="">-- Selecciona una actividad --</option>
+                        {% for act in actividades %}
+                        <option value="{{ act.numero_actividad }}" {% if act.numero_actividad==selected_actividad_id
+                            %}selected{% endif %}>
+                            {{ act.nombre }} (ID: {{ act.numero_actividad }})
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="grupo">Filtrar por Grupo:</label>
+                    <select name="grupo" id="grupo" onchange="this.form.submit()">
+                        <option value="todos" {% if selected_grupo=='todos' %}selected{% endif %}>Todos los grupos
+                        </option>
+                        {% for g in grupos %}
+                        <option value="{{ g }}" {% if g==selected_grupo %}selected{% endif %}>{{ g }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+
+                {% if entregas %}
+                <h2>Entregas encontradas</h2>
+
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Actividad</th>
+                            <th>Grupo</th>
+                            <th>No. Control</th>
+                            <th>Nombre Alumno</th>
+                            <th>Archivo Original</th>
+                            <th>Fecha Entrega</th>
+                            <th>Descargar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for entrega in entregas %}
+                        <tr>
+                            <td>{{ entrega.nombre_actividad }} (ID: {{ entrega.numero_actividad }})</td>
+                            <td>{{ entrega.Grupo }}</td>
+                            <td>{{ entrega.numero_control_alumno }}</td>
+                            <td>{{ entrega.Nombre }} {{ entrega.Paterno }} {{ entrega.Materno }}</td>
+                            <td>{{ entrega.nombre_archivo_original }}</td>
+                            <td>{{ entrega.fecha_entrega.strftime('%d/%m/%Y %H:%M') }}</td>
+
+                            <td>
+                                {% if entrega.download_filename %}
+                                <a href="{{ url_for('descargar_entrega',
+                                                numero_actividad=entrega.numero_actividad,
+                                                filename=entrega.download_filename) }}" class="boton-zona"
+                                    target="_blank">Descargar</a>
+                                {% else %}
+                                Archivo no disponible
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% elif selected_actividad_id %}
+                <p>No hay entregas para la actividad seleccionada.</p>
+                {% endif %}
+
+    </div>
+    <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
+    {% endblock %}
+
+</body>
+
+</html>

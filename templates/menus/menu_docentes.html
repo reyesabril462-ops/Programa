@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Menú</title>
+        <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/menu/menu.css">
+    </head>
+<body>
+    {% extends "base.html" %}
+
+        {% block title %}Menú Principal{% endblock %}
+
+        {% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <ul class="flashes">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+        <h1>Hola {{ docente }} Bienvenido al Menú de Docentes</h1>
+        <button type="sumit" onclick="window.location.href='{{ url_for("logout_general") }}'" class="boton-logout">Cerrar sesión</button><br><br>
+            <button type="submit" onclick="window.location.href='/actividades/docentes'" class="boton-zona">⏫ Subir actividades</button>
+            <button type="submit" onclick="window.location.href='/menu/pagina/desarrollo'" class="boton-zona">📄 Reporte</button>
+            <button type="submit" onclick="window.location.href='/docentes/alumnos/gestion'" class="boton-zona">📓 Alumnos</button>
+            <button type="button" onclick="window.location.href='{{ url_for('ayuda', from_='menu_docentes') }}'" class="boton-zona">❓ Zona de ayuda</button>
+            <button type="button" onclick="window.location.href='/chat/general'" class="boton-zona">📩 Chat general</button>
+
+        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
+    </div>
+    {% endblock %}
+</body>
+</html>
