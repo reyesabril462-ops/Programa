@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,43 +6,46 @@
     max-width: 30em;
     margin: 0 auto;
     padding: 3em;
-    border-top: 0.3em solid #027532;
-    border-bottom: 0.3em solid #027532;
-    border-left: 0.3em solid #027532;
-    border-right: 0.3em solid #027532;
+    border-top: 0.3em solid #b76bff;
+    border-bottom: 0.3em solid #b76bff;
+    border-left: 0.3em solid #b76bff;
+    border-right: 0.3em solid #b76bff;
     border-radius: 10px;
     box-shadow: 0 0.1em 0.4em rgb(0, 0, 0);
     background-color: #e9e9e9;
     text-align: center;
     margin-top: -2rem;
 }
+
 .registro-texto {
-    color: #027532;
+    color: #b76bff;
     font-size: 3em;
     transition: 0.9s;
 }
+
 .registro-texto:hover {
     color: #4c00ff;
 }
+
 body {
-    background-color: #ffffff;
+    background: linear-gradient(135deg, #ff9fd8, #b76bff);
 }
 
 .fondo-registro {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
 }
 
 .boton-registrar {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #dfff87;
-    color: black;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
+    color: white;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
@@ -50,16 +53,19 @@ body {
 }
 
 .boton-registrar:hover {
-    background-color: #00d659;
+    background: linear-gradient(90deg, #ff9fd8, #c17dff);
 }
+
 .ra {
     position: relative;
-    color: #027532;
+    color: #b76bff;
     transition: 0.9s;
 }
-.ra:hover{
+
+.ra:hover {
     color: #4c00ff;
 }
+
 .flashes {
     list-style: none;
     padding: 0;
@@ -68,7 +74,7 @@ body {
 }
 
 .flashes li {
-    background-color: #4CAF50;
+    background-color: #b76bff;
     color: white;
     padding: 10px;
     border-radius: 5px;
@@ -80,17 +86,18 @@ body {
 .flashes li.error {
     background-color: #f44336;
 }
+
 .boton-volver {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #ff1100;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
     color: white;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
-    transition: background-color 0.3s;  
+    transition: background 0.3s;
 }
 
 .boton-volver:hover {
-    background-color: #cc0000;
+    background: linear-gradient(90deg, #ff9fd8, #c17dff);
 }

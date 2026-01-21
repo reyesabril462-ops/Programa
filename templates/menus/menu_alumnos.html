@@ -29,31 +29,9 @@
         <h1>Hola {{ alumno }} Bienvenido al Menú de Alumnos</h1>
         <div class="sub-container">
             <div class="card">
-                <h3>📚 Actividades totales</h3>
-                <p>{{ total_actividades }}</p>
-            </div>
-
-            <div class="card">
-                <h3>✅ Actividades entregadas</h3>
+                <h3>Actividades entregadas</h3>
                 <p>{{ entregadas }}</p>
             </div>
-
-            <div class="card">
-                <h3>📚 Actividades vencidas</h3>
-                <p>{{ vencidas }}</p>
-            </div>
-
-            <div class="card">
-                <h3>📚 Actividades próximas a vencer</h3>
-                <p>{{ proximas }}</p>
-            </div>
-
-            <div class="card">
-                <h3>📊 Progreso de actividades</h3>
-                <canvas id="graficaAlumno"></canvas>
-                <h4 class="aviso">En proceso de creación</h4>
-            </div>
-
             <script>
                 const DATA_GRAFICA = {
                     entregadas: {{ entregadas }},
@@ -71,15 +49,10 @@
         <button type="button" onclick="window.location.href='{{ url_for('logout_general') }}'"
             class="boton-logout">Cerrar
             sesión</button> <br><br>
-        <button type="button" onclick="window.location.href='/actividades/alumnos'" class="boton-zona">📄
-            Actividades</button>
-        <button type="button" onclick="window.location.href='/calificaciones/alumnos'" class="boton-zona">🔎
+        <button type="button" onclick="window.location.href='/actividades/alumnos'"
+            class="boton-zona">Actividades</button>
+        <button type="button" onclick="window.location.href='/calificaciones/alumnos'" class="boton-zona">
             Calificaciones</button><br>
-        <button type="button" onclick="window.location.href='{{ url_for('ayuda', from_='menu_alumnos') }}'"
-            class="boton-zona">❓ Zona de ayuda</button>
-        <button type="button" onclick="window.location.href='/chat/general'" class="boton-zona">📩 Chat general</button>
-
-        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
     </div>
 
     <script>

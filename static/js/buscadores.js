@@ -31,15 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // --- ACTUALIZAR ESTADO DE CONEXIÓN DINÁMICO --- 
     function actualizarEstadoConexion() {
-        if (!navigator.onLine) {
-            btnVoz.textContent = "🔄 Voz (Whisper)";
-            btnVoz.title = "Sin internet: Usa Whisper Python (servidor local)";
-            resultadoVoz.textContent = "💡 Sin internet: Whisper Python listo (requiere servidor activo)";
-        } else {
-            btnVoz.textContent = "🎤 Voz (Online)";
-            btnVoz.title = "Con internet: Web Speech API (alta calidad)";
-            resultadoVoz.textContent = "";
-        }
+        btnVoz.textContent = "Buscar por voz";
+        btnVoz.title = "Whisper Python (servidor local)";
+        resultadoVoz.textContent = "💡 Whisper Python listo (requiere servidor activo)";
     }
 
     // Capturar alumnos al cargar 
@@ -91,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     input.addEventListener("keypress", (e) => {
         if (e.key === "Enter") buscar();
     });
-    btnVoz.addEventListener("click", buscarPorVozInteligente);
+    btnVoz.addEventListener("click", buscarPorVozWhisper);
 
     // --- BÚSQUEDA POR TEXTO --- 
     async function buscar() {
@@ -127,83 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 🚀 BÚSQUEDA INTELIGENTE: Online → Whisper (automático) 
-    async function buscarPorVozInteligente() {
-        if (navigator.onLine) {
-            // 🎤 MODO ONLINE: Web Speech API (mejor calidad) 
-            await buscarPorVozOnline();
-        } else {
-            // 🔄 MODO OFFLINE: Python Whisper (auxiliar) 
-            await buscarPorVozWhisper();
-        }
-    }
 
-    // 🎤 BUSCADOR ONLINE: Web Speech API (alta calidad) 
-    async function buscarPorVozOnline() {
-        if (!("SpeechRecognition" in window) && !("webkitSpeechRecognition" in window)) {
-            // Fallback a Whisper si no soporta Web Speech 
-            resultadoVoz.textContent = "🌐 Web Speech no disponible, usando Whisper...";
-            return buscarPorVozWhisper();
-        }
 
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-
-        recognition.lang = "es-MX";
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        btnVoz.disabled = true;
-        btnVoz.textContent = "🎙️ Escuchando...";
-        resultadoVoz.textContent = "🎤 Modo Online - Habla claramente...";
-
-        recognition.onresult = async (event) => {
-            const texto = event.results[0][0].transcript;
-            input.value = texto;
-            resultadoVoz.textContent = `"${texto}" (Online) → Buscando...`;
-
-            // Buscar en servidor con texto reconocido 
-            try {
-                const resp = await fetch(`/docentes/alumnos/buscar?q=${encodeURIComponent(texto)}`);
-                const data = await resp.json();
-                const alumnos = Array.isArray(data) ? data : [];
-
-                if (alumnos.length > 0) {
-                    renderTabla(alumnos);
-                    resultadoVoz.textContent = `"${texto}" (Online) → ${alumnos.length} resultado(s)`;
-                } else {
-                    tbody.innerHTML = "<tr><td colspan='9'>No se encontraron resultados para: \"" + texto + "\"</td></tr>";
-                    resultadoVoz.textContent = `"${texto}" (Online) → Sin resultados`;
-                }
-            } catch (err) {
-                // Fallback local si servidor falla 
-                const resultados = buscarLocal(texto);
-                renderTabla(resultados.length ? resultados : []);
-                resultadoVoz.textContent = `"${texto}" (Online→Local) → ${resultados.length} resultado(s)`;
-            }
-        };
-
-        recognition.onerror = (e) => {
-            console.warn("Web Speech error:", e.error);
-            if (e.error === "network" || e.error === "service-not-available") {
-                resultadoVoz.textContent = "🌐 Error online, cambiando a Whisper...";
-                buscarPorVozWhisper();
-            } else {
-                resultadoVoz.textContent = `⚠️ Error voz online: ${e.error}`;
-                btnVoz.disabled = false;
-                btnVoz.textContent = "🎤 Voz (Online)";
-            }
-        };
-
-        recognition.onend = () => {
-            btnVoz.disabled = false;
-            btnVoz.textContent = "🎤 Voz (Online)";
-        };
-
-        recognition.start();
-    }
-
-    // 🔄 BUSCADOR OFFLINE: Python Whisper (auxiliar confiable) 
+    // 🔄 BUSCADOR PRINCIPAL: Python Whisper 
     async function buscarPorVozWhisper() {
         try {
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -278,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     resultadoVoz.textContent = `❌ Error Whisper: ${error.message}. Verifica servidor Flask.`;
                 } finally {
                     btnVoz.disabled = false;
-                    btnVoz.textContent = navigator.onLine ? "🎤 Voz (Online)" : "🔄 Voz (Whisper)";
+                    btnVoz.textContent = "🔄 Voz (Whisper)";
                 }
             };
 
@@ -294,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
             resultadoVoz.textContent = `❌ Error micrófono: ${error.message}`;
             btnVoz.disabled = false;
-            btnVoz.textContent = navigator.onLine ? "🎤 Voz (Online)" : "🔄 Voz (Whisper)";
+            btnVoz.textContent = "🔄 Voz (Whisper)";
         }
     }
 });

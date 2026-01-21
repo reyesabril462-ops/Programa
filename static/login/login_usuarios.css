@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,93 +6,87 @@
     max-width: 30em;
     margin: 0 auto;
     padding: 3em;
-    border-top: 0.3em solid #027532;
-    border-bottom: 0.3em solid #027532;
-    border-left: 0.3em solid #027532;
-    border-right: 0.3em solid #027532;
+    border-top: 0.3em solid #b76bff;
+    border-bottom: 0.3em solid #b76bff;
+    border-left: 0.3em solid #b76bff;
+    border-right: 0.3em solid #b76bff;
     border-radius: 10px;
     box-shadow: 0 0.1em 0.4em rgb(0, 0, 0);
     background-color: #e9e9e9;
     text-align: center;
     margin-top: -0.3em;
 }
+
 .login-texto {
-    color: #027532;
+    color: #b76bff;
     font-size: 3em;
     transition: 0.9s;
-}   
+}
+
 body {
-    background-color: #ffffff;
+    background: linear-gradient(135deg, #ff9fd8, #b76bff);
 }
 
 .boton-loguear {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #dfff87;
-    color: black;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
+    color: white;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
 
 .boton-loguear:hover {
-    background-color: #00d659;
-}
-.boton-loguear {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #dfff87;
-    color: black;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-}
-
-.boton-loguear:hover {
-    background-color: #00d659;
+    background: linear-gradient(90deg, #ff9fd8, #c17dff);
 }
 
 .boton-registrar {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #dfff87;
-    color: black;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
+    color: white;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
+
 .boton-registrar:hover {
-    background-color: #00d659;
+    background: linear-gradient(90deg, #ff9fd8, #c17dff);
 }
+
 .boton-ayuda {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #dfff87;
-    color: black;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
+    color: white;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
+
 .boton-ayuda:hover {
-    background-color: #00d659;
+    background: linear-gradient(90deg, #ff9fd8, #c17dff);
 }
+
 .ayuda-login {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #dfff87;
-    color: black;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
+    color: white;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
+
 .ayuda-login:hover {
-    background-color: #00d659;
+    background: linear-gradient(90deg, #ff9fd8, #c17dff);
 }
+
 .flashes {
     list-style: none;
     padding: 0;
@@ -101,7 +95,7 @@ body {
 }
 
 .flashes li {
-    background-color: #4CAF50;
+    background-color: #b76bff;
     color: white;
     padding: 10px;
     border-radius: 5px;
@@ -113,21 +107,23 @@ body {
 .flashes li.error {
     background-color: #f44336;
 }
+
 .fondo-login {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
 }
+
 .opciones {
     width: 20em;
     padding: 5em 1em;
-    background-color: #00d659;
+    background: linear-gradient(135deg, #ff9fd8, #b76bff);
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }

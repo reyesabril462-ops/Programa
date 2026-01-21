@@ -1,78 +1,227 @@
-.container{
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #ff9fd8, #b76bff);
+    height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    width: 90%;
-    max-width: 30em;
-    min-width: 280px;
-    margin: -1em auto;
-    padding: 2em;
-    border: 0.3em solid #027532;
-    border-radius: 10px;
-    box-shadow: 0 0.1em 0.4em rgb(0, 0, 0);
-    background-color: #e9e9e9;
+    justify-content: center;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(183, 107, 255, 0.3);
+    width: 360px;
+    padding: 35px 30px;
     text-align: center;
-    margin-top: 2em;
+    animation: fadeIn 0.6s ease;
 }
 
-.boton-logout {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #ff1100;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 20px;  
-    transition: background-color 0.3s;
-    animation: slideIn 0.8s ease forwards;
-    opacity: 0;
-    transform: translateY(90px);
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.boton-logout:hover {
-    background-color: #cc0000;
+h2,
+h1,
+h5 {
+    color: #b76bff;
+    margin-bottom: 8px;
+    font-size: 26px;
 }
 
-h1 {
-    color: #027532;
-    font-size: 2em;
-    margin-bottom: 30px;
-    animation: aparecer 1.5s ease forwards;
+p {
+    color: #8b8b8b;
+    font-size: 14px;
+    margin-bottom: 28px;
 }
 
+input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    font-size: 15px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+    border-color: #b76bff;
+    box-shadow: 0 0 6px rgba(183, 107, 255, 0.3);
+    outline: none;
+}
+
+button,
+.boton-logout,
 .boton-zona {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #dfff87;
-    color: black;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 20px;
-    transition: background-color 0.3s;
-    animation: slideIn 0.8s ease forwards;
-    opacity: 0;
-    transform: translateY(90px);
-}
-.fondo-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-}
-.boton-zona:hover {
-    background-color: #00d659;
-}
-@keyframes aparecer {
-    from { opacity: 0; transform: translateY(-90px); }
-    to { opacity: 1; transform: translateY(0); }
+    width: 100%;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
+    border: 3px solid #8400ff;
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 00.2s ease, box-shadow 0.2s ease;
 }
 
-@keyframes slideIn {
-    to { opacity: 1; transform: translateY(0); }
+button:hover,
+.boton-logout:hover,
+.boton-zona:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(183, 107, 255, 0.4);
 }
+
+.error {
+    color: #b00020;
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.locked {
+    color: #b00020;
+    font-weight: 600;
+    margin-top: 20px;
+    display: none;
+}
+
+.intentos {
+    color: #6c63ff;
+    font-size: 15px;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+.extra-links {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+}
+
+.extra-links a {
+    color: #b76bff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.extra-links a:hover {
+    text-decoration: underline;
+}
+
+.footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #9a8bbf;
+}
+
+label {
+    color: #b76bff;
+    text-align: center;
+}
+
+.fondo-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+table {
+    width: 100%;
+    background: #ffffff;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    table-layout: auto;
+    margin-top: 20px;
+}
+
+table thead,
+table tbody {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table thead {
+    background: linear-gradient(135deg, #ff7ab6, #b76bff);
+    color: white;
+}
+
+table th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+    border: none;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+table td {
+    padding: 12px;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid #e8e8e8;
+    word-wrap: break-word;
+    word-break: break-word;
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr {
+    transition: all 0.2s ease;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+table tbody tr:hover {
+    background-color: #f0e6ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.btn-accion {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    margin: 2px;
+}
+
 .flashes {
     list-style: none;
     padding: 0;
@@ -93,19 +242,17 @@ h1 {
 .flashes li.error {
     background-color: #f44336;
 }
-label {
-    color:#009f13;
-    text-align: center;
+
+color: #009f13;
+text-align: center;
 }
-h5 {
-    color: #009f13;
-    text-align: center;
-}
+
 h2 {
     color: #009f13;
     text-align: center;
-}   
-table{
+}
+
+table {
     width: 100%;
     background: #ffffff;
     border-collapse: collapse;
@@ -265,42 +412,42 @@ table tbody tr:last-child td {
         padding: 1.5em;
         margin-top: 1em;
     }
-    
+
     .container-alumnos {
         width: 98%;
         padding: 1.5em;
     }
-    
+
     h1 {
         font-size: 1.5em;
         margin-bottom: 20px;
     }
-    
+
     .boton-logout,
     .boton-zona {
         padding: 8px 16px;
         font-size: 0.9em;
         margin-top: 15px;
     }
-    
+
     table {
         font-size: 0.8em;
         display: block;
         overflow-x: auto;
         white-space: nowrap;
     }
-    
+
     table th {
         padding: 12px 8px;
         min-width: 100px;
         font-size: 0.8em;
     }
-    
+
     table td {
         padding: 10px 8px;
         min-width: 100px;
     }
-    
+
     .btn-accion {
         padding: 4px 8px;
         font-size: 0.7em;
@@ -316,22 +463,23 @@ table tbody tr:last-child td {
         margin: 0.5em auto;
         border-width: 0.2em;
     }
-    
+
     .container-alumnos {
         width: 99%;
         padding: 1em;
         border-width: 0.2em;
     }
-    
+
     h1 {
         font-size: 1.3em;
         margin-bottom: 15px;
     }
-    
-    h2, h5 {
+
+    h2,
+    h5 {
         font-size: 1.1em;
     }
-    
+
     .boton-logout,
     .boton-zona {
         padding: 6px 12px;
@@ -340,7 +488,7 @@ table tbody tr:last-child td {
         width: 100%;
         box-sizing: border-box;
     }
-    
+
     table {
         font-size: 0.7em;
         display: block;
@@ -348,28 +496,28 @@ table tbody tr:last-child td {
         white-space: nowrap;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     table th {
         padding: 10px 6px;
         min-width: 80px;
         font-size: 0.75em;
     }
-    
+
     table td {
         padding: 8px 6px;
         min-width: 80px;
     }
-    
+
     .btn-accion {
         padding: 3px 6px;
         font-size: 0.6em;
         margin: 1px;
     }
-    
+
     .tabla-container::-webkit-scrollbar {
         height: 6px;
     }
-    
+
     .flashes li {
         font-size: 12px;
         padding: 8px;
@@ -378,42 +526,44 @@ table tbody tr:last-child td {
 
 /* Pantallas muy pequeñas */
 @media screen and (max-width: 320px) {
+
     .container,
     .container-alumnos {
         padding: 0.8em;
         margin: 0.2em auto;
     }
-    
+
     h1 {
         font-size: 1.2em;
     }
-    
+
     table {
         font-size: 0.6em;
     }
-    
+
     table th {
         padding: 8px 4px;
         min-width: 60px;
         font-size: 0.7em;
     }
-    
+
     table td {
         padding: 6px 4px;
         min-width: 60px;
     }
-    
+
     .btn-accion {
         padding: 2px 4px;
         font-size: 0.55em;
     }
-    
+
     .boton-logout,
     .boton-zona {
         font-size: 0.7em;
         padding: 5px 10px;
     }
 }
+
 .container-alumnos {
     display: flex;
     flex-direction: column;

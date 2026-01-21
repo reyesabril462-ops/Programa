@@ -7,22 +7,26 @@
     max-width: 100%;
     margin: 0 auto;
     padding: 3em;
-    border-top: 0.3em solid #027532;
-    border-bottom: 0.3em solid #027532;
-    border-left: 0.3em solid #027532;
-    border-right: 0.3em solid #027532;
+    border-top: 0.3em solid #b76bff;
+    border-bottom: 0.3em solid #b76bff;
+    border-left: 0.3em solid #b76bff;
+    border-right: 0.3em solid #b76bff;
     border-radius: 10px;
     box-shadow: 0 0.1em 0.4em rgb(0, 0, 0);
     background-color: #e9e9e9;
     text-align: center;
     margin-top: 6em;
-    color: #027532;
+    color: #b76bff;
+}
+
+body {
+    background: linear-gradient(135deg, #ff9fd8, #b76bff);
 }
 
 .boton-volver {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #ff1100;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -34,11 +38,11 @@
 }
 
 .boton-volver:hover {
-    background-color: #cc0000;
+    background: linear-gradient(90deg, #ff9fd8, #c17dff);
 }
 
 h1 {
-    color: #027532;
+    color: #b76bff;
     font-size: 2em;
     margin-bottom: 30px;
     animation: aparecer 1.5s ease forwards;
@@ -47,8 +51,8 @@ h1 {
 .boton-zona {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #dfff87;
-    color: black;
+    background: linear-gradient(90deg, #ff7ab6, #b76bff);
+    color: white;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
@@ -69,7 +73,7 @@ h1 {
 }
 
 .boton-zona:hover {
-    background-color: #00d659;
+    background: linear-gradient(90deg, #ff9fd8, #c17dff);
 }
 
 @keyframes aparecer {
@@ -99,7 +103,7 @@ h1 {
 }
 
 .flashes li {
-    background-color: #4CAF50;
+    background-color: #b76bff;
     color: white;
     padding: 10px;
     border-radius: 5px;
@@ -134,7 +138,7 @@ table tbody {
 }
 
 table thead {
-    background: linear-gradient(135deg, #027532, #00a83a);
+    background: linear-gradient(135deg, #ff7ab6, #b76bff);
     color: white;
 }
 
@@ -158,6 +162,9 @@ table td {
     border-bottom: 1px solid #e8e8e8;
     word-wrap: break-word;
     transition: background-color 0.2s ease;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 table tbody tr {
@@ -179,15 +186,15 @@ table tbody tr:last-child td {
 }
 
 th {
-    background: #027532;
+    background: linear-gradient(135deg, #ff9fd8, #b76bff);
     color: #ffffff;
     padding: 20px 90px;
     transition: background 0.8s ease;
 }
 
 th:hover {
-    background: #013316;
-    color: #00d659;
+    background: linear-gradient(90deg, #ff7ab6, #9855d6);
+    color: white;
 }
 
 .estado-activo {

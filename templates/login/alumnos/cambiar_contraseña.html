@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,28 +8,33 @@
     <link rel="stylesheet" href="/static/cambiar_contraseña/cambiar_contraseña.css">
     <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container">
         {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <ul class="flashes">
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endwith %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
         <h1>Establecer Nueva Contraseña</h1>
         <form method="POST" action="{{ url_for('cambiar_contraseña') }}">
-            
+
             <label for="nueva_contrasena">Nueva Contraseña:</label>
-            <input type="password" id="nueva_contrasena" name="nueva_contrasena" placeholder="Ingresa tu nueva contrasena." required><br>
+            <input type="password" id="nueva_contrasena" name="nueva_contrasena"
+                placeholder="Ingresa tu nueva contrasena." required><br>
             <label for="confirmar_contrasena">Confirmar</label>
-            <input type="password" id="confirmar_contrasena" name="confirmar_contrasena" placeholder="Confirma tu contrasena/Confirm your password" required><br>
-            <button type="submit" class="boton-zona" onclick="return(confirm('¿Estas seguro de cambiar esta contraseña?'))">Cambiar Contraseña</button>
-            <button type="button" class="boton-logout" onclick="window.location.href='/menu/principal'">Cancelar</button>
+            <input type="password" id="confirmar_contrasena" name="confirmar_contrasena"
+                placeholder="Confirma tu contrasena/Confirm your password" required><br>
+            <button type="submit" class="boton-zona"
+                onclick="return(confirm('¿Estas seguro de cambiar esta contraseña?'))">Cambiar Contraseña</button>
+            <button type="button" class="boton-logout"
+                onclick="window.location.href='/menu/principal'">Cancelar</button>
         </form>
-        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
-    </div>    
+    </div>
 </body>
+
 </html>

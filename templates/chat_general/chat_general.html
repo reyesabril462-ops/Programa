@@ -18,7 +18,7 @@
         <h2 class="texto-chat">Chat general</h2>
         <div id="lista-mensajes">
             {% for msg in mensajes %}
-            <p><strong>{{ msg.usuario }} ({{ msg.tipo_usuario }}):</strong> {{ msg.mensaje }}</p>
+            <p class="texto-mensaje"><strong>{{ msg.usuario }} ({{ msg.tipo_usuario }}):</strong> {{ msg.mensaje }}</p>
             {% endfor %}
             <input id="mensaje" placeholder="Escribe algo..." class="mensaje"><br>
             <button type="button" onclick="enviar()" class="boton-zona">Enviar</button>
@@ -52,8 +52,6 @@
                 document.getElementById("lista-mensajes").appendChild(p);
             });
         </script>
-
-        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
         {% endblock %}
 </body>
 

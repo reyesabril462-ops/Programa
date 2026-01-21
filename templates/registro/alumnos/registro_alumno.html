@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,40 +8,43 @@
     <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/registro/alumnos/registro_alumnos.css">
 </head>
+
 <body>
 
     <form method="POST">
-    <div class="container">
-        {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <ul class="flashes">
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endwith %}
-                <button type="button" onclick="window.location.href='/login/alumnos'" class="boton-volver">Volver</button>
-        <h4 class="registro-texto" for="ra">Registro de alumnos<br>Crear Cuenta</h4>
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <button type="button" onclick="window.location.href='/login/alumnos'" class="boton-volver">Volver</button>
+            <h4 class="registro-texto" for="ra">Registro de alumnos<br>Crear Cuenta</h4>
 
-        <label for="nocontrol">Numero de control:</label>
-        <input type="text" id="nocontrol" name="nocontrol" required placeholder="Ingresa tu numero de control">
+            <label for="nocontrol">Numero de control:</label>
+            <input type="text" id="nocontrol" name="nocontrol" required placeholder="Ingresa tu numero de control">
 
-        <label for="usuario">Nombre de usuario<br>(Nombre completo):</label>
-        <input type="text" id="usuario" name="usuario" required placeholder="Elige un usuario">
-        
-        <label for="curp">Curp:</label>
-        <input type="text" id="curp" name="curp" required placeholder="MEGS9180380120371820">
+            <label for="usuario">Nombre de usuario<br>(Nombre completo):</label>
+            <input type="text" id="usuario" name="usuario" required placeholder="Elige un usuario">
 
-        <label for="contrasena">Contraseña:</label>
-        <input type="password" id="contrasena" name="contrasena" required minlength="6" placeholder="Mínimo 6 caracteres">
+            <label for="curp">Curp:</label>
+            <input type="text" id="curp" name="curp" required placeholder="MEGS9180380120371820">
 
-        <button type="submit" class="boton-registrar">Registrarse</button>
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="contrasena" name="contrasena" required minlength="6"
+                placeholder="Mínimo 6 caracteres">
 
-        <p>¿Ya tienes una cuenta?<br> <button type="button" onclick="window.location.href='/login/alumnos'" class="boton-registrar">Inicia sesión</button></p>
+            <button type="submit" class="boton-registrar">Registrarse</button>
 
-    </div>
+            <p>¿Ya tienes una cuenta?<br> <button type="button" onclick="window.location.href='/login/alumnos'"
+                    class="boton-registrar">Inicia sesión</button></p>
+
+        </div>
     </form>
-<img src="/static/Cecytem_(Imagen).jpeg" class="fondo-registro">
 </body>
+
 </html>>

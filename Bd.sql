@@ -1,5 +1,10 @@
 CREATE DATABASE proyecto;
 
+ALTER USER 'root'@'localhost'
+IDENTIFIED WITH mysql_native_password
+BY 'Shisharron';
+
+
 USE proyecto;
 
 -- ACTIVIDADES (CORRECTA) 
@@ -14,10 +19,6 @@ CREATE TABLE actividades (
 ALTER TABLE actividades
 ADD descripcion TEXT,
 ADD archivo_docente VARCHAR(500);
-SELECT * FROM entregas_actividades;
-DESCRIBE alumnos;
-
-SELECT archivo_docente FROM actividades;
 
 -- ENTREGAS (TIPOS IGUALES) 
 CREATE TABLE entregas_actividades ( 
@@ -31,29 +32,12 @@ CREATE TABLE entregas_actividades (
     INDEX idx_numero_actividad (numero_actividad), 
     INDEX idx_numero_control (numero_control_alumno) 
 ); 
-
-
-
-SELECT * FROM usuarios;
-DELETE FROM entregas_actividades;
-SELECT NumeroControl, Nombre, Paterno, Materno, Grupo
-FROM alumnos
-ORDER BY NumeroControl;
-SELECT * FROM entregas_actividades WHERE numero_actividad = 1;
-
-SHOW COLUMNS FROM entregas_actividades;
-
-
-
-
 CREATE TABLE alumnos_old_login(
 nocontrol varchar(255) primary key not null,
 usuario varchar(255),
 correo varchar(255),
 contrasena varchar(255));
-select * from usuarios;
-delete from actividades where numero_actividad = 2;
-select * from actividades;
+
 
 -- Grupo 101
 INSERT INTO alumnos (NumeroControl, Curp, Nombre, Paterno, Materno, Turno, Grupo, Semestre)
@@ -400,8 +384,6 @@ usuario varchar(255),
 correo varchar(255),
 contrasena varchar(255),
 numtelefono varchar(25));
-delete from docentes;
-select * from docentes;	
 
 CREATE TABLE alumnos(
 NumeroControl bigint primary key not null,
@@ -413,8 +395,6 @@ Turno Varchar(255),
 Grupo Varchar(255),
 Semestre Varchar(255)
 );
-drop table alumnos;
-select * from alumnos;
 ALTER TABLE alumnos ADD contrasena VARCHAR(255) AFTER Curp;
 
 CREATE TABLE docente(
@@ -453,16 +433,10 @@ ALTER TABLE usuarios
   ADD COLUMN grupo VARCHAR(50) NULL,
   ADD COLUMN semestre VARCHAR(10) NULL,
   ADD COLUMN materia VARCHAR(200) NULL;
-SELECT * FROM usuarios;
 ALTER TABLE usuarios
 ADD intentos_fallidos INT DEFAULT 0,
 ADD bloqueado_hasta DATETIME NULL;
 ALTER TABLE usuarios
 ADD activo BOOLEAN DEFAULT 0,
 ADD token_confirmacion VARCHAR(255);
-
-SELECT * FROM usuarios;
-DELETE FROM usuarios where id = 2147483647;
-UPDATE usuarios SET activo = 1 WHERE id= 1;
-
 USE proyecto;

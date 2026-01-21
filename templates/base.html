@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive_helpers.css') }}">
     {% endblock %}
 </head>
+
 <body>
 
     <main>
@@ -20,34 +22,49 @@
 
     {% block scripts %}
     <script type="text/javascript">
-    // Tiempo de inactividad: 3 minutos
-    const INACTIVITY_TIMEOUT = 180000;
+        const INACTIVITY_TIMEOUT = 180000; // 3 min
+        const WARNING_TIME = 150000; // 2:30 min
 
-    {% if session.get('rol') %}
+        {% if session.get('rol') %}
         const logoutUrl = "{{ url_for('logout_inactividad') }}";
-    {% else %}
+        {% else %}
         const logoutUrl = null;
-    {% endif %}
+        {% endif %}
 
-    if (logoutUrl) {
-        let timeoutTimer;
+        if (logoutUrl) {
+            let logoutTimer;
+            let warningTimer;
+            let warningShown = false;
 
-        function resetTimer() {
-            clearTimeout(timeoutTimer);
-            timeoutTimer = setTimeout(() => {
-                window.location.href = logoutUrl;
-            }, INACTIVITY_TIMEOUT);
+            function showWarning() {
+                if (warningShown) return;
+                warningShown = true;
+                alert("⚠️ Tu sesión expirará en 30 segundos por inactividad.");
+            }
+
+            function resetTimers() {
+                clearTimeout(logoutTimer);
+                clearTimeout(warningTimer);
+
+                warningShown = false;
+
+                warningTimer = setTimeout(showWarning, WARNING_TIME);
+
+                logoutTimer = setTimeout(() => {
+                    window.location.href = logoutUrl;
+                }, INACTIVITY_TIMEOUT);
+            }
+
+            window.onload = resetTimers;
+
+            ["mousemove", "keypress", "click", "scroll", "touchstart", "touchmove"]
+                .forEach(event =>
+                    document.addEventListener(event, resetTimers)
+                );
         }
-
-        window.onload = resetTimer;
-        document.addEventListener('mousemove', resetTimer);
-        document.addEventListener('keypress', resetTimer);
-        document.addEventListener('click', resetTimer);
-        document.addEventListener('scroll', resetTimer);
-        document.addEventListener('touchstart', resetTimer);
-        document.addEventListener('touchmove', resetTimer);
-    }
     </script>
+
     {% endblock %}
 </body>
+
 </html>

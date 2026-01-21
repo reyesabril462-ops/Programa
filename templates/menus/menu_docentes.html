@@ -28,30 +28,19 @@
 
         <div class="sub-container">
             <div class="card">
-                <h3>📚 Actividades totales</h3>
+                <h3>Actividades totales</h3>
                 <p>{{ total_actividades }}</p>
-            </div><br><br>
-
-            <div class="card">
-                <h3>⏳ Actividades entregadas totales</h3>
-                <p>{{ total_entregas }}</p>
             </div>
         </div>
 
         <button type="sumit" onclick="window.location.href='{{ url_for('logout_general') }}'"
             class="boton-logout">Cerrar
             sesión</button><br><br>
-        <button type="submit" onclick="window.location.href='/actividades/docentes'" class="boton-zona">⏫ Subir
+        <button type="submit" onclick="window.location.href='/actividades/docentes'" class="boton-zona">Subir
             actividades</button>
-        <button type="submit" onclick="window.location.href='/menu/pagina/desarrollo'" class="boton-zona">📄
-            Reporte</button>
-        <button type="submit" onclick="window.location.href='/docentes/alumnos/gestion'" class="boton-zona">📓
+        <button type="submit" onclick="window.location.href='/docentes/alumnos/gestion'" class="boton-zona">
             Alumnos</button><br>
-        <button type="button" onclick="window.location.href='{{ url_for('ayuda', from_='menu_docentes') }}'"
-            class="boton-zona">❓ Zona de ayuda</button>
-        <button type="button" onclick="window.location.href='/chat/general'" class="boton-zona">📩 Chat general</button>
-
-        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
+        <button type="button" onclick="window.location.href='/chat/general'" class="boton-zona">Chat</button>
     </div>
     {% endblock %}
 </body>

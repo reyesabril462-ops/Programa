@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login</title>
-        <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/static/login/login_docentes.css">
-    </head>
-    <body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/boostrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/login/login_docentes.css">
+</head>
+
+<body>
     <form method="POST">
-            <div class="container">
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <ul class="flashes">
-                            {% for message in messages %}
-                                <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                {% endwith %}
-                <button type="button" onclick="window.location.href='/menu/principal'" class="boton-registrar"><---Volver</button>
-                <h1 class="login-texto">Login de Docentes</h1>
-                <label for="noempleado">Numero de empleado:</label>
-                <input type="text" id="noempleado" name="noempleado" placeholder="Numero de empleado/Employed Number" 
-                       autocomplete="username" required><br>
+        <div class="container">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+            <button type="button" onclick="window.location.href='/menu/principal'" class="boton-registrar"><---Volver<
+                    /button>
+                    <h1 class="login-texto">Login de Docentes</h1>
+                    <label for="noempleado">Numero de empleado:</label>
+                    <input type="text" id="noempleado" name="noempleado"
+                        placeholder="Numero de empleado/Employed Number" autocomplete="username" required><br>
 
-                <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" class="contrasena" placeholder="Contraseña/Password" autocomplete="current-password" required><br>
-                <button type="submit" class="boton-loguear">Iniciar sesión</button>
-                <button type="button" onclick="window.location.href='{{ url_for('ayuda', from_='login_docentes') }}'" class="ayuda-login">¿Necesitas ayuda?</button>
-                <button type="button" onclick="window.location.href='/registro/docentes'" class="ayuda-login">Registrarse</button>
-            </div>
-        </form>
+                    <label for="contrasena">Contraseña:</label>
+                    <input type="password" id="contrasena" name="contrasena" class="contrasena"
+                        placeholder="Contraseña/Password" autocomplete="current-password" required><br>
+                    <button type="submit" class="boton-loguear">Iniciar sesión</button>
+                    <button type="button"
+                        onclick="window.location.href='{{ url_for('ayuda', from_='login_docentes') }}'"
+                        class="ayuda-login">¿Necesitas ayuda?</button>
+                    <button type="button" onclick="window.location.href='/registro/docentes'"
+                        class="ayuda-login">Registrarse</button>
+        </div>
+    </form>
+</body>
 
-        <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-login">
-    </body>
 </html>

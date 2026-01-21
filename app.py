@@ -13,26 +13,16 @@ import subprocess
 import traceback # Importar traceback para depuración 
 from datetime import datetime 
 import secrets
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+# Importaciones de email removidas - validación por correo desactivada
 
 
 
 # Intentar importar Vosk para reconocimiento offline 
-try: 
-    from vosk import Model, KaldiRecognizer 
-    import json 
-    VOSK_AVAILABLE = True 
-except ImportError: 
-    VOSK_AVAILABLE = False 
  
  
 app = Flask(__name__) 
 app.secret_key = "Clavesuperhipermegasupremaparaguardarcosasydemascosasenlasessionyensecreto" 
-socketio = SocketIO(app) 
-EMAIL_SISTEMA = "correoenviadordecorreosdeconfi@gmail.com"
-EMAIL_PASSWORD = "jvee fkuc nufd zdao"
+socketio = SocketIO(app)
 
 # Optional cached Whisper (Python) model - loaded on first use if available 
 WHISPER_PY_MODEL = None 
@@ -48,8 +38,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS 
  
 # Configuración de SESIÓN 
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5) 
-app.permanent_session_lifetime = timedelta(minutes=5) 
+app.permanent_session_lifetime = timedelta(minutes=3) 
 
 # Conexión a la Base de Datos 
 def get_db_connection():
@@ -57,10 +46,57 @@ def get_db_connection():
         host="localhost",
         user="root",
         password="",
-        database="proyecto"
+        database="proyecto",
+        port=3307
     )
 db = get_db_connection()
  
+@app.before_request
+def verificar_sesion_global():
+    rutas_publicas = {
+        "login_general",
+        "registro_general",
+        "confirmar_cuenta",
+        "cancelar_cuenta",
+        "inicio",
+        "ayuda",
+        "volver_ayuda",
+        "static"
+    }
+
+    if request.endpoint is None:
+        return
+
+    if request.endpoint in rutas_publicas:
+        return
+
+    # ⏳ Sesión expirada o inexistente
+    if "user_id" not in session:
+        session.clear()
+        flash("Sesión expirada por inactividad. Inicia sesión nuevamente.", "warning")
+        return redirect(url_for("login_general"))
+
+from flask import request
+from datetime import datetime, timedelta
+
+@app.before_request
+def controlar_inactividad():
+    if "user_id" not in session:
+        return
+
+    ahora = datetime.now()
+    ultima = session.get("ultima_actividad")
+
+    if ultima:
+        ultima = datetime.fromisoformat(ultima)
+        if ahora - ultima > timedelta(minutes=3):
+            session.clear()
+            flash("Sesión cerrada por inactividad.", "warning")
+            return redirect(url_for("login_general"))
+
+    session["ultima_actividad"] = ahora.isoformat()
+
+
 # ----------------------------------------------------- 
 # --- DECORADORES SIMPLIFICADOS ----------------------- 
 # ----------------------------------------------------- 
@@ -189,7 +225,7 @@ def menu_alumnos():
     proximas = cursor.fetchone()[0]
 
     cursor.close()
-
+    no_entregadas = total_actividades - entregadas
     progreso = int((entregadas / total_actividades) * 100) if total_actividades else 0
 
     return render_template(
@@ -197,6 +233,7 @@ def menu_alumnos():
         alumno=alumno,
         total_actividades=total_actividades,
         entregadas=entregadas,
+        no_entregadas=no_entregadas,
         vencidas=vencidas,
         proximas=proximas,
         progreso=progreso
@@ -1193,12 +1230,6 @@ def login_general():
             cursor.close()
             return redirect(url_for("login_general"))
 
-        # 🚨 Cuenta no activada
-        if not user["activo"]:
-            flash("Debes confirmar tu cuenta por correo", "warning")
-            cursor.close()
-            return redirect(url_for("login_general"))
-
         # 🧹 Si el bloqueo ya expiró → resetear
         if user["bloqueado_hasta"] and not user["bloqueado"]:
             cursor.execute("""
@@ -1251,11 +1282,14 @@ def login_general():
 
         # 🔐 Sesión
         session.clear()
+        session.permanent = True
         session["user_id"] = user["id"]
         session["usuario"] = user["usuario"]
         session["correo"] = user["correo"]
         session["rol"] = user["rol"]
         session["nombre_completo"] = user["nombre_completo"]
+
+        session["ultima_actividad"] = datetime.now().isoformat()
 
         cursor.close()
 
@@ -1295,7 +1329,6 @@ def registro_general():
             return redirect(url_for("registro_general"))
 
         hash_pw = generate_password_hash(password)
-        token = secrets.token_urlsafe(32)
 
         cursor = db.cursor()
 
@@ -1309,13 +1342,13 @@ def registro_general():
             flash("Usuario, correo o ID ya existe", "error")
             return redirect(url_for("registro_general"))
 
-        # INSERT limpio (sin duplicados)
+        # INSERT sin confirmación por correo (activo=1 por defecto)
         sql = """
         INSERT INTO usuarios (
             id, usuario, correo, contrasena, rol,
             grupo, semestre, materia,
-            activo, token_confirmacion
-        ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            activo
+        ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
         """
 
         values = (
@@ -1327,100 +1360,18 @@ def registro_general():
             grupo if rol == "alumno" else None,
             semestre if rol == "alumno" else None,
             materia if rol == "docente" else None,
-            0,          # activo = FALSE
-            token
+            1          # activo = TRUE (sin validación por correo)
         )
 
         cursor.execute(sql, values)
         db.commit()
+        cursor.close()
 
-        # Links de confirmación
-        link_confirmar = url_for("confirmar_cuenta", token=token, _external=True)
-        link_cancelar = url_for("cancelar_cuenta", token=token, _external=True)
-
-        mensaje = f"""
-Hola {usuario},
-
-Confirma tu cuenta aquí:
-{link_confirmar}
-
-Si no fuiste tú, cancela el registro:
-{link_cancelar}
-"""
-
-        enviado = enviar_correo(
-            correo,
-            "Confirma tu cuenta",
-            mensaje
-        )
-
-        if not enviado:
-            flash("Error al enviar el correo de confirmación", "error")
-            return redirect(url_for("registro_general"))
-
-
-        flash("Cuenta creada. Revisa tu correo para activarla.", "success")
+        flash("Cuenta creada exitosamente. Ya puedes iniciar sesión.", "success")
         return redirect(url_for("login_general"))
 
     return render_template("registro/general/general.html")
- 
-@app.route("/confirmar/<token>")
-def confirmar_cuenta(token):
-    cursor = db.cursor()
 
-    cursor.execute("""
-        SELECT id FROM usuarios
-        WHERE token_confirmacion=%s AND activo=0
-    """, (token,))
-
-    if not cursor.fetchone():
-        flash("Token inválido o cuenta ya activada", "error")
-        return redirect(url_for("login_general"))
-
-    cursor.execute("""
-        UPDATE usuarios
-        SET activo=1, token_confirmacion=NULL
-        WHERE token_confirmacion=%s
-    """, (token,))
-    db.commit()
-
-    flash("Cuenta activada correctamente", "success")
-    return redirect(url_for("login_general"))
-
-
-@app.route("/cancelar/<token>")
-def cancelar_cuenta(token):
-    cursor = db.cursor()
-
-    cursor.execute("""
-        DELETE FROM usuarios
-        WHERE token_confirmacion=%s AND activo=0
-    """, (token,))
-    db.commit()
-
-    flash("Registro cancelado", "info")
-    return redirect(url_for("registro_general"))
-
-def enviar_correo(destinatario, asunto, cuerpo):
-    msg = MIMEMultipart()
-    msg["From"] = EMAIL_SISTEMA
-    msg["To"] = destinatario
-    msg["Subject"] = asunto
-
-    msg.attach(MIMEText(cuerpo, "plain"))
-
-    try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.ehlo()
-        server.starttls()
-        server.login(EMAIL_SISTEMA, EMAIL_PASSWORD)
-        server.send_message(msg)
-        server.quit()
-        print("📧 Correo enviado a:", destinatario)
-        return True
-    except Exception as e:
-        print("❌ ERROR SMTP:", e)
-        return False
 
 # PARTE DE MATERIAS:
 

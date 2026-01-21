@@ -72,7 +72,7 @@
                                 {% if actividad.archivo_docente %}
                                 <a href="{{ url_for('descargar_material_docente', filename=actividad.archivo_docente) }}"
                                     class="boton-zona">
-                                    Descargar material
+                                    Material
                                 </a>
                                 {% else %}
                                 Sin material
@@ -89,7 +89,6 @@
                 <h1>🎉No hay actividades asignadas por el momento.🎉🥳</h1>
                 {% endif %}
     </div>
-    <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
     {% endblock %}
 </body>
 

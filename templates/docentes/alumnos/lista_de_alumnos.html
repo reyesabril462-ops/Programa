@@ -44,12 +44,11 @@
             <input type="text" id="materno" name="Materno" required><br>
 
             <label for="turno">Turno</label><br>
-            <div class="radio-group">
-                <label for="turno_vespertino">Vespertino</label><br>
-                <input type="radio" id="turno_vespertino" name="Turno" value="Vespertino" required><br>
-                <label for="turno_matutino">Matutino</label><br>
-                <input type="radio" id="turno_matutino" name="Turno" value="Matutino" required>
-            </div><br>
+            <select id="turno" name="Turno" required>
+                <option value="" disabled selected>Selecciona el turno</option>
+                <option value="Vespertino">Vespertino</option>
+                <option value="Matutino">Matutino</option>
+            </select><br>
 
             <label for="grupo">Grupo</label><br>
             <select id="grupo" name="Grupo" required>
@@ -126,8 +125,6 @@
             </tbody>
         </table>
     </div>
-
-    <img src="/static/Cecytem_(Imagen).jpeg" class="fondo-menu">
 
 
     <script src="{{ url_for('static', filename='js/buscadores.js')}}"></script>
