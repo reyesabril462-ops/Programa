@@ -11,8 +11,16 @@ import speech_recognition as sr
 from flask_socketio import SocketIO, emit 
 import subprocess 
 import traceback # Importar traceback para depuración 
-from datetime import datetime 
 import secrets
+# ===== CONEXION A LA BASE DE DATOS =====
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="programa-perron"
+)
+cursor = db.cursor (dictionary=True)
+# ======================================
 # Importaciones de email removidas - validación por correo desactivada
 
 
@@ -26,7 +34,6 @@ socketio = SocketIO(app)
 
 # Optional cached Whisper (Python) model - loaded on first use if available 
 WHISPER_PY_MODEL = None 
- 
 # Configuración de subidas (al inicio de tu archivo Flask) 
 UPLOAD_FOLDER = 'uploads/entregas_alumnos' 
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'zip', 'rar', 'mp4', 'mp3', 'avi', 'mkv'} 
@@ -42,17 +49,21 @@ app.permanent_session_lifetime = timedelta(minutes=3)
 
 # Conexión a la Base de Datos 
 def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="proyecto",
-        port=3307
-    )
-db = get_db_connection()
+    try:
+        return mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="proyecto",
+            port=3307
+        )
+    except mysql.connector.Error as err:
+        print(f"Error en conexión a BD: {err}")
+        return None
  
 @app.before_request
 def verificar_sesion_global():
+    """Verifica sesión y controla inactividad"""
     rutas_publicas = {
         "login_general",
         "registro_general",
@@ -76,14 +87,7 @@ def verificar_sesion_global():
         flash("Sesión expirada por inactividad. Inicia sesión nuevamente.", "warning")
         return redirect(url_for("login_general"))
 
-from flask import request
-from datetime import datetime, timedelta
-
-@app.before_request
-def controlar_inactividad():
-    if "user_id" not in session:
-        return
-
+    # Controlar inactividad
     ahora = datetime.now()
     ultima = session.get("ultima_actividad")
 

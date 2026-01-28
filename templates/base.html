@@ -20,8 +20,12 @@
         <!-- Contenido del footer -->
     </footer>
 
-    {% block scripts %}
-    <script type="text/javascript">
+   {% block scripts %}
+<script type="text/javascript">
+    // Guard: only initialize once
+    if (typeof INACTIVITY_TIMEOUT !== 'undefined') {
+        console.log('Inactivity timeout already initialized');
+    } else {
         const INACTIVITY_TIMEOUT = 180000; // 3 min
         const WARNING_TIME = 150000; // 2:30 min
 
@@ -43,28 +47,12 @@
             }
 
             function resetTimers() {
-                clearTimeout(logoutTimer);
-                clearTimeout(warningTimer);
-
-                warningShown = false;
-
-                warningTimer = setTimeout(showWarning, WARNING_TIME);
-
-                logoutTimer = setTimeout(() => {
-                    window.location.href = logoutUrl;
-                }, INACTIVITY_TIMEOUT);
+                // ...existing code...
             }
-
-            window.onload = resetTimers;
-
-            ["mousemove", "keypress", "click", "scroll", "touchstart", "touchmove"]
-                .forEach(event =>
-                    document.addEventListener(event, resetTimers)
-                );
         }
-    </script>
-
-    {% endblock %}
+    }
+</script>
+{% endblock %}
 </body>
 
 </html>
